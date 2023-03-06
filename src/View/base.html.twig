@@ -21,6 +21,8 @@
             {%  if session.get('id') %}
                 <a href="{{ route("page_perso", {"idUser" : session.get('id')}) }}">Ma page</a>
                 <a href="{{ route("deconnexion") }}">Déconnexion</a>
+                <a href="{{ route("poster_musique") }}">Poster musique</a>
+                <a href="{{ route("poster_album") }}">Poster album</a>
             {% else %}
                 <a href="{{ route("inscription") }}">Inscription</a>
                 <a href="{{ route("connexion") }}">Connexion</a>

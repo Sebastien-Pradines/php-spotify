@@ -35,5 +35,18 @@
         {% else %}
             <p id="no-publications" class="center">Pas de publications pour le moment!</p>
         {% endif %}
+        {% if musiques %}
+            <div id="feed">
+                {% for musique in musiques %}
+                    <div class="feedy">
+                        <img class="avatar" src="{{ asset("img/utilisateurs/" ~ musique.utilisateur.profilePictureName ) }}" alt="avatar de l'utilisateur">
+                        <span>{{musique.getDate().format('d F Y')}}</span>
+                        <audio controls>
+                            <source src="{{ asset("music/" ~ musique.urlMusique) }}" type="audio/mp3">
+                        </audio>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </main>
 {% endblock %}

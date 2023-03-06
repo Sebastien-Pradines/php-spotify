@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Nouvel album{% endblock %}
+
+{% block page_content %}
+    <main>
+        <form action="{{ route("submit_album") }}" id="form-access" class="center" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Nouvel album</legend>
+                <div class="access-container">
+                    <label for="nom">Nom</label>
+                    <input id="nom" type="text" value="{{ nom }}" name="nom" required/>
+                </div>
+                <div class="access-container">
+                    <label for="albumImg">Image :</label>
+                    <input required type="file" id="albumImg" name="albumImg" accept="image/png, image/jpeg">
+                </div>
+                <input id="access-submit" type="submit" value="Poster!">
+            </fieldset>
+        </form>
+    </main>
+{% endblock %}

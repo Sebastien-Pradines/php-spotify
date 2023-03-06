@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Nouvelle musique{% endblock %}
+
+{% block page_content %}
+    <main>
+        <form action="{{ route("submit_musique") }}" id="form-access" class="center" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Nouvelle musique</legend>
+                <div class="access-container">
+                    <label for="title">Titre</label>
+                    <input id="title" type="text" value="{{ titre }}" name="titre" required/>
+                </div>
+                <div class="access-container">
+                    <label for="musique">Ficher :</label>
+                    <input required type="file" id="musique" name="musique" accept="audio/mp3, .mp3">
+                </div>
+                <input id="access-submit" type="submit" value="Poster!">
+            </fieldset>
+        </form>
+    </main>
+{% endblock %}

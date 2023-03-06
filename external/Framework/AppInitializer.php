@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Framework\Listener\FrameworkListener;
+use Framework\Mailer\Mailer;
 use Framework\Twig\Extension\TwigAppFrameworkExtension;
 use Symfony\Component\DependencyInjection;
 use Symfony\Component\DependencyInjection\Reference;
@@ -115,6 +116,10 @@ class AppInitializer
         foreach ($configClass::listeners as $listener) {
             $eventDispatcherReference->addMethodCall('addSubscriber', [new Reference($listener)]);
         }
+
+        //Mailer
+
+        $containerBuilder->register('mailer', Mailer::class);
 
         //Services
         $configClass::services($containerBuilder);
