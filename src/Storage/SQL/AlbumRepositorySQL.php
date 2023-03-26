@@ -24,7 +24,28 @@ class AlbumRepositorySQL implements Repository
 
     public function get($id)
     {
-        // TODO: Implement get() method.
+        $values = [
+            "idAlbum" => $id,
+        ];
+        $statement = $this->pdo->prepare("SELECT idAlbum, nom, nomImage, u.idUtilisateur, login, profilePictureName 
+                                                FROM albums a
+                                                JOIN utilisateurs u on a.idAuteur = u.idUtilisateur
+                                                WHERE idAlbum = :idAlbum");
+
+        $statement->execute($values);
+        $data = $statement->fetch();
+
+        $album = new Album();
+        $album->setIdAlbum($data["idAlbum"]);
+        $album->setNom($data["nom"]);
+        $album->setUrlImage($data["nomImage"]);
+        $utilisateur = new Utilisateur();
+        $utilisateur->setIdUtilisateur($data["idUtilisateur"]);
+        $utilisateur->setLogin($data["login"]);
+        $utilisateur->setProfilePictureName($data["profilePictureName"]);
+        $album->setUtilisateur($utilisateur);
+
+        return $album;
     }
 
     public function create($album)
@@ -44,9 +65,13 @@ class AlbumRepositorySQL implements Repository
         // TODO: Implement update() method.
     }
 
-    public function remove($entity)
+    public function remove($album)
     {
-        // TODO: Implement remove() method.
+        $values = [
+            "idAlbum" => $album->getIdAlbum(),
+        ];
+        $statement = $this->pdo->prepare("DELETE FROM albums WHERE idAlbum = :idAlbum");
+        $statement->execute($values);
     }
 
     public function getAllFrom($idUtilisateur) : array {
@@ -54,10 +79,10 @@ class AlbumRepositorySQL implements Repository
             "idAuteur" => $idUtilisateur,
         ];
         $statement = $this->pdo->prepare("SELECT idAlbum, nom, nomImage, idUtilisateur, login, profilePictureName 
-                                                FROM album a 
+                                                FROM albums a 
                                                 JOIN utilisateurs u on a.idAuteur = u.idUtilisateur
                                                 WHERE idAuteur = :idAuteur                    
-                                                ORDER BY date DESC");
+                                                ORDER BY idAlbum DESC");
         $statement->execute($values);
 
         $albums = [];
@@ -76,5 +101,33 @@ class AlbumRepositorySQL implements Repository
         }
 
         return $albums;
+    }
+
+    public function getFromMusique($id)
+    {
+        $values = [
+            "idMusique" => $id,
+        ];
+        $statement = $this->pdo->prepare("SELECT a.idAlbum, nom, nomImage, u.idUtilisateur, login, profilePictureName 
+                                                FROM albums a
+                                                JOIN utilisateurs u on a.idAuteur = u.idUtilisateur
+                                                JOIN albums_musique am on a.idAlbum = am.idAlbum
+                                                WHERE am.idMusique = :idMusique");
+
+        $statement->execute($values);
+        $data = $statement->fetch();
+
+        if($data){
+            $album = new Album();
+            $album->setIdAlbum($data["idAlbum"]);
+            $album->setNom($data["nom"]);
+            $album->setUrlImage($data["nomImage"]);
+            $utilisateur = new Utilisateur();
+            $utilisateur->setIdUtilisateur($data["idUtilisateur"]);
+            $utilisateur->setLogin($data["login"]);
+            $utilisateur->setProfilePictureName($data["profilePictureName"]);
+            $album->setUtilisateur($utilisateur);
+            return $album;
+        }
     }
 }

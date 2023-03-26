@@ -11,13 +11,24 @@ class MusiqueService
 
     private UtilisateurService $serviceUtilisateur;
 
+    private AlbumService $serviceAlbum;
+
     private $musiqueRoot;
 
-    public function __construct($repositoryManager, $serviceUtilisateur, $musiqueRoot)
+    public function __construct($repositoryManager, $serviceUtilisateur, $serviceAlbum, $musiqueRoot)
     {
         $this->repository = $repositoryManager->getRepository(Musique::class);
         $this->serviceUtilisateur = $serviceUtilisateur;
+        $this->serviceAlbum = $serviceAlbum;
         $this->musiqueRoot = $musiqueRoot;
+    }
+
+    public function getMusique($idMusique, $allowNull = true) {
+        $musique =  $this->repository->get($idMusique);
+        if(!$allowNull && $musique == null) {
+            throw new ServiceException("Musique inexistante!");
+        }
+        return $musique;
     }
 
     public function createMusique($titre, $musiqueFile, $userId){
@@ -46,5 +57,25 @@ class MusiqueService
             $utilisateur = $this->serviceUtilisateur->getUtilisateurByLogin($refUtilisateur, false);
         }
         return $this->repository->getAllFrom($utilisateur->getIdUtilisateur());
+    }
+
+    public function getMusiquesFromAlbum($idAlbum) {
+        return $this->repository->getAllFromAlbum($idAlbum);
+    }
+
+    public function setAlbum($idAlbum, $idMusique){
+        $musique = $this->getMusique($idMusique);
+        $album = $this->serviceAlbum->getAlbum($idAlbum);
+        $musique->setAlbum($album);
+        $this->repository->setAlbum($album->getIdAlbum(), $idMusique);
+    }
+
+    public function removeMusique($idUtilisateur, $idMusique) {
+        $utilisateur = $this->serviceUtilisateur->getUtilisateur($idUtilisateur, false);
+        $musique = $this->getMusique($idMusique, false);
+        if($utilisateur->getIdUtilisateur() != $musique->getUtilisateur()->getIdUtilisateur()) {
+            throw new ServiceException("L'utilisateur n'est pas l'auteur de cette musique!");
+        }
+        $this->repository->remove($musique);
     }
 }

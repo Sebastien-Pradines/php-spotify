@@ -20,13 +20,19 @@ class UtilisateurController extends Controller
 
     public function pagePerso($idUser) {
         $publicationsService = $this->container->get('publication_service');
+        $albumService = $this->container->get('album_service');
         $musiquesService = $this->container->get('musique_service');
         $userService = $this->container->get('utilisateur_service');
         try {
             $publications = $publicationsService->getPublicationsFrom($idUser);
             $musiques = $musiquesService->getMusiquesFrom($idUser);
+            $albums = $albumService->getAlbumsFrom($idUser);
             $utilisateur = $userService->getUtilisateur($idUser, false);
-            return $this->render("Utilisateurs/page_perso.html.twig", ["utilisateur" => $utilisateur, "publications" => $publications, "musiques" => $musiques]);
+            return $this->render("Utilisateurs/page_perso.html.twig", [
+                "utilisateur" => $utilisateur,
+                "publications" => $publications,
+                "musiques" => $musiques,
+                "albums" => $albums]);
         }
         catch (ServiceException $exception) {
             throw new ResourceNotFoundException();

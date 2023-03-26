@@ -11,42 +11,84 @@
                 </div>
             {% endif %}
         {% endif %}
-        {% if publications %}
-        <div id="feed">
-            {% for publication in publications %}
+
+        {% if albums %}
+            <div id="feed">
                 <div class="feedy">
-                    <div class="feedy-header">
-                        <img class="avatar" src="{{ asset("img/utilisateurs/" ~ publication.utilisateur.profilePictureName ) }}" alt="avatar de l'utilisateur">
-                        <div class="feedy-info">
-                            <span>{{publication.getUtilisateur().getLogin()}}</span>
-                            <span> - </span>
-                            <span>{{publication.getDate().format('d F Y')}}</span>
-                            <p>{{publication.getMessage()}}</p>
-                            {%  if session.get('id') %}
-                                {% if session.get('id') == publication.utilisateur.idUtilisateur %}
-                                    <button class="delete-feedy" onclick="removeFeedy(this, {{ publication.idPublication }})">Supprimer</button>
+                    {% for album in albums %}
+                            <div class="album">
+                                <a class="album-link" href="{{ route("page_album", {"idAlbum" : album.idAlbum}) }}">
+                                    <img class="img-album" src="{{ asset("img/albums/" ~ album.urlImage ) }}" alt="pochette de l'album">
+                                    <span class="album-title">{{ album.nom }}</span>
+                                </a>
+                                {%  if session.get('id') %}
+                                    {% if session.get('id') == album.utilisateur.idUtilisateur %}
+                                        <td class="musique-item">
+                                            <button class="delete-feedy" onclick="removeAlbum(this, {{ album.idAlbum }})">Supprimer</button>
+                                        </td>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        </div>
-                    </div>
+                            </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-        {% else %}
-            <p id="no-publications" class="center">Pas de publications pour le moment!</p>
+            </div>
         {% endif %}
+
         {% if musiques %}
             <div id="feed">
-                {% for musique in musiques %}
+                <div class="feedy">
+                    {% for musique in musiques %}
+                            <div class="album">
+                                <a class="album-link" href="{{ route("page_musique", {"idMusique" : musique.idMusique}) }}">
+                                {% if musique.album %}
+                                    <img class="img-album" src="{{ asset("img/albums/" ~ musique.album.urlImage ) }}" alt="pochette de l'album">
+                                {% else %}
+                                    <img class="img-album" src="{{ asset("img/default.jpg") }}" alt="pochette de l'album">
+                                {% endif %}
+                                <span class="album-title">{{ musique.titre }}</span>
+                                </a>
+                                {%  if session.get('id') %}
+                                    {% if session.get('id') == musique.utilisateur.idUtilisateur %}
+                                        <td class="musique-item">
+                                            <button class="delete-feedy" onclick="removeMusiqueFromPagePerso(this, {{ musique.idMusique }})">Supprimer</button>
+                                        </td>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div id="feed">
+                <div class="feedy">
+                    <h1>Cet utilisateur n'a posté aucune de musique</h1>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if publications %}
+            <div id="feed">
+                {% for publication in publications %}
                     <div class="feedy">
-                        <img class="avatar" src="{{ asset("img/utilisateurs/" ~ musique.utilisateur.profilePictureName ) }}" alt="avatar de l'utilisateur">
-                        <span>{{musique.getDate().format('d F Y')}}</span>
-                        <audio controls>
-                            <source src="{{ asset("music/" ~ musique.urlMusique) }}" type="audio/mp3">
-                        </audio>
+                        <div class="feedy-header">
+                            <img class="avatar" src="{{ asset("img/utilisateurs/" ~ publication.utilisateur.profilePictureName ) }}" alt="avatar de l'utilisateur">
+                            <div class="feedy-info">
+                                <span>{{publication.getUtilisateur().getLogin()}}</span>
+                                <span> - </span>
+                                <span>{{publication.getDate().format('d F Y')}}</span>
+                                <p>{{publication.getMessage()}}</p>
+                                {%  if session.get('id') %}
+                                    {% if session.get('id') == publication.utilisateur.idUtilisateur %}
+                                        <button class="delete-feedy" onclick="removeFeedy(this, {{ publication.idPublication }})">Supprimer</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
+        {% else %}
+            <p id="no-publications" class="center">Pas de publications pour le moment!</p>
         {% endif %}
     </main>
 {% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Album: {{ album.nom }}{% endblock %}
+
+{% block page_content %}
+<main>
+    <div class="album-main">
+        <h1 class="album-titre">{{ album.nom }}</h1>
+        <a class="album-auteur" href="{{ route("page_perso", {"idUser" : album.utilisateur.idUtilisateur}) }}">
+            <h2>Posté par: {{ album.utilisateur.login }}</h2>
+        </a>
+        <img class="img-album" src="{{ asset("img/albums/" ~ album.urlImage ) }}">
+    </div>
+    {% if musiques %}
+                <table id="liste-musique">
+                    <tr class="musique-ligne">
+                        <th class="album-title">Titre</th>
+                        <th class="album-title">Player</th>
+                        <th class="album-title">Posté le</th>
+                        {%  if session.get('id') %}
+                            {% if session.get('id') == album.utilisateur.idUtilisateur %}
+                                <th class="album-title">Action</th>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+
+                {% for musique in musiques %}
+                    <tr class="musique-ligne">
+                            <td class="musique-item">
+                                <a id="album-link" href="{{ route("page_musique", {"idMusique" : musique.idMusique}) }}">
+                                 <span class="album-title">{{ musique.titre }}</span>
+                                </a>
+                            </td>
+                            <td class="musique-item">
+                                <audio controls>
+                                    <source src="{{ asset("music/" ~ musique.urlMusique) }}" type="audio/mp3">
+                                </audio>
+                            </td>
+                            <td class="musique-item">
+                                <span>{{ musique.getDate().format('d/m/Y') }}</span>
+                            </td>
+                        {%  if session.get('id') %}
+                            {% if session.get('id') == musique.utilisateur.idUtilisateur %}
+                                <td class="musique-item">
+                                    <button class="delete-feedy" onclick="removeMusiqueFromAlbum(this, {{ musique.idMusique }})">Supprimer</button>
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </table>
+        {% else %}
+        <h1> Il semble qu'il n'y ai aucune musique dans cet album.</h1>
+    {% endif %}
+
+</main>
+{% endblock %}

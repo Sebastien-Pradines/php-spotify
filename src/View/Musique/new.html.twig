@@ -15,6 +15,15 @@
                     <label for="musique">Ficher :</label>
                     <input required type="file" id="musique" name="musique" accept="audio/mp3, .mp3">
                 </div>
+                <div class="access-container">
+                    <label for="album">Selectionnez un album :</label>
+                    <select required name="album" id="album">
+                        <option value="default" selected="selected">Aucun album</option>
+                        {% for album in albums %}
+                            <option value="{{ album.idAlbum }}">{{ album.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <input id="access-submit" type="submit" value="Poster!">
             </fieldset>
         </form>

@@ -55,7 +55,7 @@ header {
 
 #feed {
     margin: auto;
-    max-width: 700px;
+    max-width: 1400px;
 }
 
 /* Feedy */
@@ -70,11 +70,13 @@ header {
 }
 
 .feedy {
+    display: flex;
     background: #fff;
     margin: 20px auto;
     padding: 30px;
     border: 1px solid black;
     position: relative;
+    overflow-x: auto;
 }
 
 .feedy:hover {
@@ -139,6 +141,12 @@ header {
 
 .access-container input {
     width: 100%;
+}
+
+.access-container select {
+    width: 100%;
+    height: 34px;
+    font-size: 25px;
 }
 
 #form-access {
@@ -218,8 +226,6 @@ nav a {
 }
 
 .delete-feedy {
-    position: absolute;
-    right: 15px;
     background-color: red;
     color: white;
     cursor: pointer;
@@ -231,4 +237,114 @@ nav a {
     cursor: pointer;
     font-size: 20px;
     margin : 20px 0;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #3a3a3a #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+}
+
+/* Albums */
+.img-album {
+    height: 250px;
+    width: 250px;
+}
+
+.album {
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    border: black solid 1px;
+    border-radius: 5px;
+    background-color: #e3e3e3;
+}
+
+.album-title{
+    width: 325px;
+    margin: 5px auto;
+    font-size: larger;
+}
+
+.album-link{
+    color: black;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+
+/* liste des musiques */
+.album-main{
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.album-titre{
+    font-size: xx-large;
+    margin: 0 auto;
+}
+
+.album-auteur{
+    margin: 0 auto;
+    color: black;
+    text-decoration: none;
+}
+
+#liste-musique{
+    margin: 0 auto;
+    min-width: 1300px;
+}
+
+.musique-ligne {
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid black;
+    position: relative;
+    overflow-x: auto;
+}
+
+.musique-ligne:hover {
+    box-shadow: 0 0 5px 0;
+    cursor: pointer;
+}
+
+.musique-header {
+    display: flex;
+    align-items:flex-start;
+    font-size:15px;
+}
+
+.musique-item {
+    justify-content: center;
+    width: 325px;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
 }

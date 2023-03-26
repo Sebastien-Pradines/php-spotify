@@ -5,6 +5,8 @@ namespace Config;
 use Framework\Services\ServerSessionManager;
 use Symfony\Component\DependencyInjection\Reference;
 use TheFeed\Application\AlbumController;
+use TheFeed\Application\API\AlbumControllerAPI;
+use TheFeed\Application\API\MusiqueControllerAPI;
 use TheFeed\Application\API\PublicationControllerAPI;
 use TheFeed\Application\API\UtilisateurControllerAPI;
 use TheFeed\Application\MusiqueController;
@@ -60,6 +62,8 @@ class ConfigurationGlobal
         "album_controller" => AlbumController::class,
         "publication_controller_api" => PublicationControllerAPI::class,
         "utilisateur_controller_api" => UtilisateurControllerAPI::class,
+        "musique_controller_api" => MusiqueControllerAPI::class,
+        "album_controller_api" => AlbumControllerAPI::class,
     ];
 
     const routes = [
@@ -94,6 +98,13 @@ class ConfigurationGlobal
                 "_logged" => true,
             ]
         ],
+        "page_musique" => [
+            "path" => "musique/{idMusique}",
+            "methods" => ["GET"],
+            "parameters" => [
+                "_controller" => "musique_controller::pageMusique",
+            ]
+        ],
         "poster_album" => [
             "path" => "album/new",
             "methods" => ["GET"],
@@ -108,6 +119,13 @@ class ConfigurationGlobal
             "parameters" => [
                 "_controller" => "album_controller::submitAlbum",
                 "_logged" => true,
+            ]
+        ],
+        "page_album" => [
+            "path" => "album/{idAlbum}",
+            "methods" => ["GET"],
+            "parameters" => [
+                "_controller" => "album_controller::pageAlbum",
             ]
         ],
         "connexion" => [
@@ -184,6 +202,24 @@ class ConfigurationGlobal
                 "_logged" => true,
             ]
         ],
+        "remove_musique_api" => [
+            "path" => "api/musique/{idMusique}",
+            "methods" => ["DELETE"],
+            "parameters" => [
+                "_controller" => "musique_controller_api::removeMusique",
+                "idMusique" => null,
+                "_logged" => true,
+            ]
+        ],
+        "remove_album_api" => [
+            "path" => "api/album/{idAlbum}",
+            "methods" => ["DELETE"],
+            "parameters" => [
+                "_controller" => "album_controller_api::removeAlbum",
+                "idAlbum" => null,
+                "_logged" => true,
+            ]
+        ],
     ];
 
     const listeners = [
@@ -206,18 +242,19 @@ class ConfigurationGlobal
                 "%profile_pictures_storage%"
             ])
         ;
-        $container->register('musique_service', MusiqueService::class)
-            ->setArguments([
-                new Reference('repository_manager'),
-                new Reference('utilisateur_service'),
-                "%musique_storage%"
-            ])
-        ;
         $container->register('album_service', AlbumService::class)
             ->setArguments([
                 new Reference('repository_manager'),
                 new Reference('utilisateur_service'),
                 "%album_pictures_storage%"
+            ])
+        ;
+        $container->register('musique_service', MusiqueService::class)
+            ->setArguments([
+                new Reference('repository_manager'),
+                new Reference('utilisateur_service'),
+                new Reference('album_service'),
+                "%musique_storage%"
             ])
         ;
         $container->register('app_listener', AppListener::class)

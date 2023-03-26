@@ -31,6 +31,11 @@ class Musique
      */
     private $utilisateur;
 
+    /**
+     * @var Album
+     */
+    private $album = null;
+
     public static function create($url, $titre, $utilisateur)
     {
         $musique = new Musique();
@@ -119,5 +124,21 @@ class Musique
     public function setUtilisateur(Utilisateur $utilisateur): void
     {
         $this->utilisateur = $utilisateur;
+    }
+
+    /**
+     * @return Album|null
+     */
+    public function getAlbum(): ?Album
+    {
+        return $this->album;
+    }
+
+    /**
+     * @param Album|null $album
+     */
+    public function setAlbum(?Album $album): void
+    {
+        $this->album = $album;
     }
 }

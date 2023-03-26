@@ -77,3 +77,51 @@ function removeUser(id) {
     }
     xhr.send(data);
 }
+
+function removeMusiqueFromAlbum(button, id) {
+    var URL = apiBase + "musique/"+id;
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", URL, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    var data = JSON.stringify({});
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var listeMusique = document.getElementById("liste-musique");
+            var musiqueLigne = button.closest(".musique-ligne");
+            musiqueLigne.remove();
+        }
+    }
+    xhr.send(data);
+}
+
+function removeMusiqueFromPagePerso(button, id) {
+    var URL = apiBase + "musique/"+id;
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", URL, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    var data = JSON.stringify({});
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var listeMusique = document.getElementById("liste-musique");
+            var album = button.closest(".album");
+            album.remove();
+        }
+    }
+    xhr.send(data);
+}
+
+function removeAlbum(button, id) {
+    var URL = apiBase + "album/"+id;
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", URL, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    var data = JSON.stringify({});
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var listeMusique = document.getElementById("liste-musique");
+            var album = button.closest(".album");
+            album.remove();
+        }
+    }
+    xhr.send(data);
+}

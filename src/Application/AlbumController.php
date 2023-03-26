@@ -4,6 +4,7 @@ namespace TheFeed\Application;
 
 use Framework\Application\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use TheFeed\Business\Exception\ServiceException;
 
 class AlbumController extends Controller
@@ -26,5 +27,20 @@ class AlbumController extends Controller
             $this->addFlash('error', $e->getMessage());
         }
         return $this->redirectToRoute('feed');
+    }
+
+    public function pageAlbum($idAlbum){
+        $albumService = $this->container->get('album_service');
+        $musiquesService = $this->container->get('musique_service');
+        try {
+            $musiques = $musiquesService->getMusiquesFromAlbum($idAlbum);
+            $album = $albumService->getAlbum($idAlbum);
+            return $this->render("Album/show.html.twig", [
+                "musiques" => $musiques,
+                "album" => $album]);
+        }
+        catch (ServiceException $exception) {
+            throw new ResourceNotFoundException();
+        }
     }
 }
